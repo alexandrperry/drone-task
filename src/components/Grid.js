@@ -15,45 +15,51 @@ export default function Grid() {
   const [dronPos, setDronPos] = useState({ row: 0, column: 0 });
   const { row, column } = dronPos;
   const { fuel, move, resetFuel } = useContext(fuelContext);
-  const upHandler = ({ key }) => {
-    if (fuel) {
-      if (key === "ArrowUp") {
-        if (row) {
-          move();
-          array[row - 1][column] = { value: 1 };
-          array[row][column] = { value: 0 };
-          setDronPos({ row: row - 1, column });
+  const upHandler = useCallback(
+    ({ key }, row, column) => {
+      if (fuel) {
+        if (key === "ArrowUp") {
+          if (row) {
+            move();
+            array[row - 1][column] = { value: 1 };
+            array[row][column] = { value: 0 };
+            setDronPos({ row: row - 1, column });
+          }
+        }
+        if (key === "ArrowDown") {
+          if (array.length - 1 !== row) {
+            move();
+            array[row + 1][column] = { value: 1 };
+            array[row][column] = { value: 0 };
+            setDronPos({ row: row + 1, column });
+          }
+        }
+        if (key === "ArrowLeft") {
+          if (column) {
+            move();
+            array[row][column - 1] = { value: 1 };
+            array[row][column] = { value: 0 };
+            setDronPos({ row, column: column - 1 });
+          }
+        }
+        if (key === "ArrowRight") {
+          if (array[row].length - 1 !== column) {
+            move();
+            array[row][column + 1] = { value: 1 };
+            array[row][column] = { value: 0 };
+            setDronPos({ row, column: column + 1 });
+          }
         }
       }
-      if (key === "ArrowDown") {
-        if (array.length - 1 !== row) {
-          move();
-          array[row + 1][column] = { value: 1 };
-          array[row][column] = { value: 0 };
-          setDronPos({ row: row + 1, column });
-        }
-      }
-      if (key === "ArrowLeft") {
-        if (column) {
-          move();
-          //const copyArr = [...array];
-          array[row][column - 1] = { value: 1 };
-          array[row][column] = { value: 0 };
-          setDronPos({ row, column: column - 1 });
-        }
-      }
-      if (key === "ArrowRight") {
-        if (array[row].length - 1 !== column) {
-          move();
-          array[row][column + 1] = { value: 1 };
-          array[row][column] = { value: 0 };
-          setDronPos({ row, column: column + 1 });
-        }
-      }
-    }
-  };
+    },
+    [array, fuel, move]
+  );
 
-  const handle = useCallback(e => upHandler(e, row, column), [upHandler]);
+  const handle = useCallback(e => upHandler(e, row, column), [
+    upHandler,
+    row,
+    column
+  ]);
   useLayoutEffect(() => {
     window.addEventListener("keyup", handle);
     return () => {
