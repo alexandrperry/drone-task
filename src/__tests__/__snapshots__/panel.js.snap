@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Panel component renders correctly 1`] = `
+<div
+  className="panel"
+>
+  <IoIosFlame
+    className="fireIcon"
+  />
+  <span>
+    %
+  </span>
+  <br />
+  <span>
+    H: 
+  </span>
+  <span>
+    W: 
+  </span>
+</div>
+`;
