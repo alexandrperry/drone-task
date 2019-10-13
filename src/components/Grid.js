@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useContext, useLayoutEffect } from "react";
+import React, {
+  useEffect,
+  useState,
+  useContext,
+  useLayoutEffect,
+  useCallback
+} from "react";
 import { useWindowSize } from "../hooks/useWindowSize";
 import fuelContext from "../context/fuel";
 import GridItem from "./GridItem";
@@ -9,60 +15,63 @@ export default function Grid() {
   const [dronPos, setDronPos] = useState({ row: 0, column: 0 });
   const { row, column } = dronPos;
   const { fuel, move, resetFuel } = useContext(fuelContext);
-  const upHandler = ({ key }) => {
-    if (fuel) {
-      if (key === "ArrowUp") {
-        if (row) {
-          move();
-          const copyArr = [...array];
-          copyArr[row - 1][column] = { value: 1 };
-          copyArr[row][column] = { value: 0 };
-          setArray(copyArr);
-          setDronPos({ row: row - 1, column });
+  const upHandler = useCallback(
+    ({ key }) => {
+      if (fuel) {
+        if (key === "ArrowUp") {
+          if (row) {
+            move();
+            array[row - 1][column] = { value: 1 };
+            array[row][column] = { value: 0 };
+            setDronPos({ row: row - 1, column });
+          }
+        }
+        if (key === "ArrowDown") {
+          if (array.length - 1 !== row) {
+            move();
+            array[row + 1][column] = { value: 1 };
+            array[row][column] = { value: 0 };
+            setDronPos({ row: row + 1, column });
+          }
+        }
+        if (key === "ArrowLeft") {
+          if (column) {
+            move();
+            //const copyArr = [...array];
+            array[row][column - 1] = { value: 1 };
+            array[row][column] = { value: 0 };
+            setDronPos({ row, column: column - 1 });
+          }
+        }
+        if (key === "ArrowRight") {
+          if (array[row].length - 1 !== column) {
+            move();
+            array[row][column + 1] = { value: 1 };
+            array[row][column] = { value: 0 };
+            setDronPos({ row, column: column + 1 });
+          }
         }
       }
-      if (key === "ArrowDown") {
-        if (array.length - 1 !== row) {
-          move();
-          const copyArr = [...array];
-          copyArr[row + 1][column] = { value: 1 };
-          copyArr[row][column] = { value: 0 };
-          setArray(copyArr);
-          setDronPos({ row: row + 1, column });
-        }
-      }
-      if (key === "ArrowLeft") {
-        if (column) {
-          move();
-          const copyArr = [...array];
-          copyArr[row][column - 1] = { value: 1 };
-          copyArr[row][column] = { value: 0 };
-          setArray(copyArr);
-          setDronPos({ row, column: column - 1 });
-        }
-      }
-      if (key === "ArrowRight") {
-        if (array[row].length - 1 !== column) {
-          move();
-          const copyArr = [...array];
-          copyArr[row][column + 1] = { value: 1 };
-          copyArr[row][column] = { value: 0 };
-          setArray(copyArr);
-          setDronPos({ row, column: column + 1 });
-        }
-      }
-    }
-  };
+    },
+    [row, column, fuel, array, move]
+  );
+
+  const handle = useCallback(e => upHandler(e, row, column), [
+    upHandler,
+    row,
+    column
+  ]);
   useLayoutEffect(() => {
-    window.addEventListener("keyup", upHandler);
+    window.addEventListener("keyup", handle);
     return () => {
-      window.removeEventListener("keyup", upHandler);
+      window.removeEventListener("keyup", handle);
     };
-  }, [row, column]);
-  useEffect(() => {
-    let calc = () => {
-      const maxRow = Math.floor(innerHeight / 50);
-      const maxCol = Math.floor(innerWidth / 50);
+  }, [handle]);
+
+  let calc = (height, width) => {
+    if (height && width) {
+      const maxRow = Math.floor(height / 50);
+      const maxCol = Math.floor(width / 50);
       if (maxRow && maxCol) {
         const row = Math.floor(maxRow / 2);
         const column = Math.floor(maxCol / 2);
@@ -77,10 +86,16 @@ export default function Grid() {
         setDronPos({ row, column });
         setArray(res);
       }
-    };
+    }
+  };
+
+  const calcArray = useCallback(() => {
+    calc(innerHeight, innerWidth);
+  }, [innerHeight, innerWidth]);
+  useEffect(() => {
+    calcArray();
     resetFuel();
-    calc();
-  }, [innerWidth, innerHeight]);
+  }, [calcArray]);
 
   return (
     <div className="grid">
