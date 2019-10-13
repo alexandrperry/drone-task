@@ -1,0 +1,49 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.grid {
+  font-size: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.gridRow {
+  display: flex;
+  height: 50px;
+  width: 100vw;
+}
+
+.gridItem {
+  display: inline-block;
+  height: 50px;
+  width: 50px;
+  background-color: #bbdefb;
+  border: 1px rebeccapurple solid;
+}
+
+.droneIcon {
+  width: 40px;
+  height: 40px;
+  position: relative;
+  top: 3px;
+  left: 3px;
+  /* transform: translateY(-50%); */
+}
+
+.fireIcon {
+  width: 25px;
+  height: 25px;
+  position: relative;
+  color: orange;
+}
+
+.panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 150px;
+  background-color: #bcaaa4;
+}
