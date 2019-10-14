@@ -8,7 +8,7 @@ const fuelContext = React.createContext({
 
 export const FuelProvider = ({ children }) => {
   const [fuel, setFuel] = useState(100);
-  let move = () => setFuel(prevFuel => prevFuel - 1);
+  let move = newFuel => setFuel(newFuel);
   let resetFuel = () => setFuel(100);
   return (
     <fuelContext.Provider value={{ fuel, move, resetFuel }}>
