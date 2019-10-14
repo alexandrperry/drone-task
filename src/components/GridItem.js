@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useEffect, useCallback } from "react";
+import React, { useContext } from "react";
 import { GiRocket } from "react-icons/gi";
 import fuelContext from "../context/fuel";
 import dronPositionContext from "../context/dronePosition";
