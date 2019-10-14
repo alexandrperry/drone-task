@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import React, { useState, useCallback } from "react";
-=======
-import React, { useState ,useCallback} from "react";
->>>>>>> origin/master
 
 export const dronePosition = React.createContext({
   dimensions: {},
