@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+import React, { useState, useCallback } from "react";
+=======
 import React, { useState ,useCallback} from "react";
+>>>>>>> origin/master
 
 export const dronePosition = React.createContext({
   dimensions: {},
@@ -12,12 +16,12 @@ export const DronePositionProvider = ({ children }) => {
   });
   const measuredRef = useCallback(node => {
     if (node !== null) {
-      const height = node.getBoundingClientRect().top
-      const width = node.getBoundingClientRect().left
+      const height = node.getBoundingClientRect().top;
+      const width = node.getBoundingClientRect().left;
       setDimensions({ height, width });
     }
   }, []);
-  
+
   return (
     <dronePosition.Provider value={{ dimensions, measuredRef }}>
       {children}

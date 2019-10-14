@@ -5,7 +5,7 @@ import dronPositionContext from "../context/dronePosition";
 
 export default function GridItem({ drone }) {
   const { fuel } = useContext(fuelContext);
-  const {measuredRef } = useContext(dronPositionContext);
+  const { measuredRef } = useContext(dronPositionContext);
   const color = fuel ? "orange" : "grey";
   if (drone) {
     return (
