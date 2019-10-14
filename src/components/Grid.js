@@ -16,44 +16,54 @@ export default function Grid() {
   const { row, column } = dronPos;
   const { fuel, move, resetFuel } = useContext(fuelContext);
   const upHandler = useCallback(
-    ({ key }) => {
+    ({ key }, row, column) => {
+      console.log("uphandler");
       if (fuel) {
-        if (key === "ArrowUp") {
-          if (row) {
-            move();
-            array[row - 1][column] = { value: 1 };
-            array[row][column] = { value: 0 };
-            setDronPos({ row: row - 1, column });
+        switch (key) {
+          case "ArrowUp": {
+            if (row) {
+              move(fuel - 1);
+              array[row - 1][column] = { value: 1 };
+              array[row][column] = { value: 0 };
+              setDronPos({ row: row - 1, column });
+            }
+            break;
           }
-        }
-        if (key === "ArrowDown") {
-          if (array.length - 1 !== row) {
-            move();
-            array[row + 1][column] = { value: 1 };
-            array[row][column] = { value: 0 };
-            setDronPos({ row: row + 1, column });
+          case "ArrowDown": {
+            if (array.length - 1 !== row) {
+              move(fuel - 1);
+              array[row + 1][column] = { value: 1 };
+              array[row][column] = { value: 0 };
+              setDronPos({ row: row + 1, column });
+            }
+            break;
           }
-        }
-        if (key === "ArrowLeft") {
-          if (column) {
-            move();
-            //const copyArr = [...array];
-            array[row][column - 1] = { value: 1 };
-            array[row][column] = { value: 0 };
-            setDronPos({ row, column: column - 1 });
+          case "ArrowLeft": {
+            if (column) {
+              move(fuel - 1);
+              //const copyArr = [...array];
+              array[row][column - 1] = { value: 1 };
+              array[row][column] = { value: 0 };
+              setDronPos({ row, column: column - 1 });
+            }
+            break;
           }
-        }
-        if (key === "ArrowRight") {
-          if (array[row].length - 1 !== column) {
-            move();
-            array[row][column + 1] = { value: 1 };
-            array[row][column] = { value: 0 };
-            setDronPos({ row, column: column + 1 });
+          case "ArrowRight": {
+            if (array[row].length - 1 !== column) {
+              move(fuel - 1);
+              array[row][column + 1] = { value: 1 };
+              array[row][column] = { value: 0 };
+              setDronPos({ row, column: column + 1 });
+            }
+            break;
+          }
+          default: {
+            break;
           }
         }
       }
     },
-    [row, column, fuel, array, move]
+    [array, move, fuel]
   );
 
   const handle = useCallback(e => upHandler(e, row, column), [
